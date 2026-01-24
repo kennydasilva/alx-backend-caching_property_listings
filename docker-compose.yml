@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   postgres:
     image: postgres:latest
@@ -11,7 +9,7 @@ services:
       POSTGRES_USER: property_user
       POSTGRES_PASSWORD: property_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
 
   redis:
     image: redis:latest
