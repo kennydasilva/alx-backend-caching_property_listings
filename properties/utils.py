@@ -1,18 +1,16 @@
 from django.core.cache import cache
-from .models import  Property
+from .models import Property
 
 
-def get_all_properties():
+def getallproperties():
     """
-    Returns all properties using a low level cache
-    -if exist cache on redis ,returns cache.
-    - if not exists , query the databbase and store the cache for 1h
+    Returns all Property objects.
+    Uses Redis low-level caching for 1 hour.
     """
+    queryset = cache.get('allproperties')
 
-    #check the cache 
-    properties =cache.get(all_properties)
-    if properties is not None:
-        return properties
-    
+    if queryset is None:
+        queryset = Property.objects.all()
+        cache.set('allproperties', queryset, 3600)
 
-    
+    return queryset
