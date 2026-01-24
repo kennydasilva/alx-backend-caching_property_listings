@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.decorators.cache import cachepage
+from django.views.decorators.cache import cache_page, cachepage
 from .models import Property
 
 
