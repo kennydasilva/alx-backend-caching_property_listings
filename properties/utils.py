@@ -23,23 +23,33 @@ def get_redis_cache_metrics():
     """ 
     Retrieve Redis cache hit/miss metrics and calculate hit ratio.
     """
+    try:
 
-    redis_conn=get_redis_connection("default")
-    info=redis_conn.info()
+        redis_conn=get_redis_connection("default")
+        info=redis_conn.info()
 
-    hits=info.get("keyspace_hits", 0)
-    misses=info.get("keyspace_misses",0)
+        hits=info.get("keyspace_hits", 0)
+        misses=info.get("keyspace_misses",0)
 
-    total=hits+misses
-    hit_ratio=hits/total if total > 0 else 0
+        total_requests=hits+misses
+        hit_ratio=hits/total_requests if total_requests > 0 else 0
 
-    metrics={
-        "keyspace_hits":hits,
-        "keyspace_misses":misses,
-        "hit_ratio": hit_ratio,
-    }
+        metrics={
+            "keyspace_hits":hits,
+            "keyspace_misses":misses,
+            "hit_ratio": hit_ratio,
+        }
 
 
-    logger.info("Redis cache metrics: %s", metrics)
+        logger.info("Redis cache metrics: %s", metrics)
 
-    return metrics
+        return metrics
+    
+
+    except Exception as e:
+        logger.error("Error retrieving Redis cache metrics: %s", e)
+        return {
+            "keyspace_hits": 0,
+            "keyspace_misses": 0,
+            "hit_ratio": 0,
+        }
